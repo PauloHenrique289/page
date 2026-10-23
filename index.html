@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quer namorar comigo?</title>
+
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(160deg, #ff3b5c, #b3001b);
+            overflow: hidden;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        }
+
+        .painel {
+            position: relative;
+            z-index: 2;
+            background-color: #fff;
+            width: 500px;
+            max-width: 90%;
+            border-radius: 24px;
+            text-align: center;
+            padding: 30px 20px 40px;
+            box-sizing: border-box;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+        }
+
+        h1 {
+            margin: 0 0 5px;
+            color: #b3001b;
+            font-size: 2rem;
+        }
+
+        h2 {
+            margin: 10px 0 25px;
+            color: #333;
+        }
+
+        .ilustracao {
+            width: 220px;
+            max-width: 70%;
+        }
+
+        .coracao-principal {
+            transform-origin: 100px 100px;
+            animation: batida 1.4s infinite;
+        }
+
+        @keyframes batida {
+            0%, 100% { transform: scale(1); }
+            15% { transform: scale(1.08); }
+            30% { transform: scale(1); }
+            45% { transform: scale(1.08); }
+            60% { transform: scale(1); }
+        }
+
+        .brilho {
+            animation: piscar 2s infinite;
+        }
+
+        @keyframes piscar {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
+
+        button {
+            height: 44px;
+            width: 80px;
+            background-color: #e0102f;
+            border: 2px solid #fff;
+            outline: 2px solid #e0102f;
+            border-radius: 12px;
+            color: #fff;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        #sim {
+            margin-right: 12px;
+            transition: transform 0.2s;
+        }
+
+        #nao {
+            position: relative;
+            background-color: #888;
+            outline-color: #888;
+        }
+
+        .flutuante {
+            position: fixed;
+            bottom: -40px;
+            z-index: 1;
+            color: rgba(255, 255, 255, 0.6);
+            animation: subir linear forwards;
+            pointer-events: none;
+        }
+
+        @keyframes subir {
+            to { transform: translateY(-115vh) rotate(20deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="painel">
+        <h1>Gabrielle Sousa</h1>
+
+        <svg class="ilustracao" viewBox="0 0 200 180" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <defs>
+                <linearGradient id="grad" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0" stop-color="#ff6b8a"/>
+                    <stop offset="1" stop-color="#c2001f"/>
+                </linearGradient>
+            </defs>
+
+            <!-- coração principal -->
+            <g class="coracao-principal">
+                <path d="M100 165 C20 110 10 60 50 35 C75 20 95 32 100 50 C105 32 125 20 150 35 C190 60 180 110 100 165 Z"
+                      fill="url(#grad)"/>
+                <ellipse cx="62" cy="55" rx="14" ry="8" fill="#fff" opacity="0.45" transform="rotate(-35 62 55)"/>
+            </g>
+
+            <!-- coraçõezinhos -->
+            <path d="M28 40 C18 32 20 22 27 21 C31 20 28 24 28 26 C28 24 25 20 29 21 C36 22 38 32 28 40 Z" fill="#ff8fa6"/>
+            <path d="M172 30 C162 22 164 12 171 11 C175 10 172 14 172 16 C172 14 169 10 173 11 C180 12 182 22 172 30 Z" fill="#ff8fa6"/>
+
+            <!-- brilhos -->
+            <g fill="#ffd54a">
+                <path class="brilho" d="M168 90 l3 8 8 3 -8 3 -3 8 -3 -8 -8 -3 8 -3 z"/>
+                <path class="brilho" style="animation-delay:0.7s" d="M24 100 l2 6 6 2 -6 2 -2 6 -2 -6 -6 -2 6 -2 z"/>
+                <path class="brilho" style="animation-delay:1.3s" d="M100 10 l2 6 6 2 -6 2 -2 6 -2 -6 -6 -2 6 -2 z"/>
+            </g>
+        </svg>
+
+        <h2 id="pergunta">Aceita namorar comigo? 💍</h2>
+
+        <button id="sim">SIM!</button>
+        <button id="nao">NÃO!</button>
+    </div>
+
+    <script>
+        var botaoSim = document.getElementById("sim");
+        var botaoNao = document.getElementById("nao");
+        var pergunta = document.getElementById("pergunta");
+        var tamanhoSim = 1;
+
+        function fuja(evento) {
+            if (evento) evento.preventDefault();
+
+            // Na primeira fuga o botão vira "fixed" para poder ir a qualquer lugar da tela
+            botaoNao.style.position = "fixed";
+
+            var maxX = window.innerWidth - botaoNao.offsetWidth;
+            var maxY = window.innerHeight - botaoNao.offsetHeight;
+
+            botaoNao.style.left = Math.floor(Math.random() * maxX) + "px";
+            botaoNao.style.top = Math.floor(Math.random() * maxY) + "px";
+
+            // Cada fuga deixa o botão SIM um pouquinho maior
+            if (tamanhoSim < 1.8) {
+                tamanhoSim += 0.1;
+                botaoSim.style.transform = "scale(" + tamanhoSim + ")";
+            }
+        }
+
+        function aceitou() {
+            pergunta.textContent = "Eu sabia! ❤️ Te amo!";
+            botaoNao.style.display = "none";
+            botaoSim.style.display = "none";
+            for (var i = 0; i < 40; i++) {
+                setTimeout(criarCoracao, i * 60);
+            }
+        }
+
+        // Corações flutuando no fundo
+        function criarCoracao() {
+            var c = document.createElement("div");
+            c.className = "flutuante";
+            c.textContent = "❤";
+            c.style.left = Math.random() * 100 + "vw";
+            c.style.fontSize = (16 + Math.random() * 30) + "px";
+            c.style.animationDuration = (5 + Math.random() * 5) + "s";
+            document.body.appendChild(c);
+            setTimeout(function () { c.remove(); }, 10000);
+        }
+        setInterval(criarCoracao, 700);
+
+        botaoNao.addEventListener("mouseover", fuja);
+        botaoNao.addEventListener("touchstart", fuja);
+        botaoNao.addEventListener("click", fuja);
+        botaoSim.addEventListener("click", aceitou);
+    </script>
+
+</body>
+</html>
